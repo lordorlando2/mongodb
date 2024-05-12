@@ -75,3 +75,13 @@ db.encuentros_deportivos.insertMany([
     { equipoLocal: madridId, equipoVisitante: bayernId, fecha: new Date("2024-06-18"), hora: "18:30", estadio: "Santiago Bernabéu", arbitroPrincipal: taylorId, arbitrosAsistentes: [brychId, orsatoId], resultado: ObjectId() },
     { equipoLocal: psgId, equipoVisitante: cityId, fecha: new Date("2024-06-19"), hora: "20:45", estadio: "Parc des Princes", arbitroPrincipal: kuipersId, arbitrosAsistentes: [taylorId, cakirId], resultado: ObjectId() }
 ]);
+
+//Algunas consultas sobre la bd
+use torneo_futbol
+
+// Mostrar solo el nombre y la posición de los deportistas
+db.deportistas.find({}, { nombre: 1, posicion: 1, _id: 0 }) 
+
+// Mostrar solo los primeros 3 deportistas
+db.deportistas.find().limit(3)
+
