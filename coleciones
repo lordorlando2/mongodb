@@ -1,0 +1,77 @@
+use torneo_futbol; // Crea (o selecciona si ya existe) la base de datos
+
+db.createCollection("deportistas");
+db.createCollection("equipos");
+db.createCollection("entrenadores");
+db.createCollection("arbitros");
+db.createCollection("encuentros_deportivos"); // Usamos guión bajo en lugar de espacio
+db.createCollection("resultados");
+// No creamos "tabla_de_posiciones" ya que se genera dinámicamente
+// Insertar un deportista
+let messi = db.deportistas.insertOne({
+  nombre: "Lionel Messi",
+  fechaNacimiento: new Date("1987-06-24"),
+  posicion: "delantero",
+  nacionalidad: "Argentina"
+});
+
+// Insertar un equipo
+db.equipos.insertOne({
+  nombre: "FC Barcelona",
+  entrenador: ObjectId(),
+  partidosJugados: 0,
+  partidosGanados: 0,
+  jugadores: [messi.insertedId] // Usar el ObjectId del deportista insertado
+});
+
+
+// Creamos variables para almacenar los ObjectIds
+let messiId, ronaldoId, neymarId, mbappeId, lewandowskiId;
+let barcelonaId, madridId, psgId, bayernId, cityId;
+let xaviId, ancelottiId, pochettinoId, nagelsmannId, guardiolaId;
+let orsatoId, kuipersId, brychId, cakirId, taylorId;
+
+// 1. Colección "deportistas"
+db.deportistas.insertMany([
+    { _id: messiId = ObjectId(), nombre: "Lionel Messi", fechaNacimiento: new Date("1987-06-24"), posicion: "delantero", equipo: barcelonaId, nacionalidad: "Argentina" },
+    { _id: ronaldoId = ObjectId(), nombre: "Cristiano Ronaldo", fechaNacimiento: new Date("1985-02-05"), posicion: "delantero", equipo: madridId, nacionalidad: "Portugal" },
+    { _id: neymarId = ObjectId(), nombre: "Neymar Jr.", fechaNacimiento: new Date("1992-02-05"), posicion: "delantero", equipo: psgId, nacionalidad: "Brasil" },
+    { _id: mbappeId = ObjectId(), nombre: "Kylian Mbappé", fechaNacimiento: new Date("1998-12-20"), posicion: "delantero", equipo: psgId, nacionalidad: "Francia" },
+    { _id: lewandowskiId = ObjectId(), nombre: "Robert Lewandowski", fechaNacimiento: new Date("1988-08-21"), posicion: "delantero", equipo: bayernId, nacionalidad: "Polonia" }
+]);
+
+// 2. Colección "equipos"
+db.equipos.insertMany([
+    { _id: barcelonaId = ObjectId(), nombre: "FC Barcelona", entrenador: xaviId, partidosJugados: 0, partidosGanados: 0, partidosEmpatados: 0, partidosPerdidos: 0, golesFavor: 0, golesContra: 0, puntos: 0 },
+    { _id: madridId = ObjectId(), nombre: "Real Madrid", entrenador: ancelottiId, partidosJugados: 0, partidosGanados: 0, partidosEmpatados: 0, partidosPerdidos: 0, golesFavor: 0, golesContra: 0, puntos: 0 },
+    { _id: psgId = ObjectId(), nombre: "Paris Saint-Germain", entrenador: pochettinoId, partidosJugados: 0, partidosGanados: 0, partidosEmpatados: 0, partidosPerdidos: 0, golesFavor: 0, golesContra: 0, puntos: 0 },
+    { _id: bayernId = ObjectId(), nombre: "Bayern Munich", entrenador: nagelsmannId, partidosJugados: 0, partidosGanados: 0, partidosEmpatados: 0, partidosPerdidos: 0, golesFavor: 0, golesContra: 0, puntos: 0 },
+    { _id: cityId = ObjectId(), nombre: "Manchester City", entrenador: guardiolaId, partidosJugados: 0, partidosGanados: 0, partidosEmpatados: 0, partidosPerdidos: 0, golesFavor: 0, golesContra: 0, puntos: 0 }
+]);
+
+// 3. Colección "entrenadores"
+db.entrenadores.insertMany([
+    { _id: xaviId = ObjectId(), nombre: "Xavi Hernández", fechaNacimiento: new Date("1980-01-25"), nacionalidad: "España", equipo: barcelonaId },
+    { _id: ancelottiId = ObjectId(), nombre: "Carlo Ancelotti", fechaNacimiento: new Date("1959-06-10"), nacionalidad: "Italia", equipo: madridId },
+    { _id: pochettinoId = ObjectId(), nombre: "Mauricio Pochettino", fechaNacimiento: new Date("1972-03-02"), nacionalidad: "Argentina", equipo: psgId },
+    { _id: nagelsmannId = ObjectId(), nombre: "Julian Nagelsmann", fechaNacimiento: new Date("1987-07-23"), nacionalidad: "Alemania", equipo: bayernId },
+    { _id: guardiolaId = ObjectId(), nombre: "Pep Guardiola", fechaNacimiento: new Date("1971-01-18"), nacionalidad: "España", equipo: cityId }
+]);
+
+// 4. Colección "arbitros"
+db.arbitros.insertMany([
+    { _id: orsatoId = ObjectId(), nombre: "Daniele Orsato", fechaNacimiento: new Date("1975-11-23"), nacionalidad: "Italia", partidosArbitrados: [] },
+    { _id: kuipersId = ObjectId(), nombre: "Björn Kuipers", fechaNacimiento: new Date("1973-03-28"), nacionalidad: "Países Bajos", partidosArbitrados: [] },
+    { _id: brychId = ObjectId(), nombre: "Felix Brych", fechaNacimiento: new Date("1975-08-03"), nacionalidad: "Alemania", partidosArbitrados: [] },
+    { _id: cakirId = ObjectId(), nombre: "Cüneyt Çakır", fechaNacimiento: new Date("1976-11-23"), nacionalidad: "Turquía", partidosArbitrados: [] },
+    { _id: taylorId = ObjectId(), nombre: "Anthony Taylor", fechaNacimiento: new Date("1978-10-20"), nacionalidad: "Inglaterra", partidosArbitrados: [] }
+]);
+
+// 5. Colección "encuentros_deportivos"
+db.encuentros_deportivos.insertMany([
+    { equipoLocal: barcelonaId, equipoVisitante: madridId, fecha: new Date("2024-06-15"), hora: "16:00", estadio: "Camp Nou", arbitroPrincipal: orsatoId, arbitrosAsistentes: [kuipersId, brychId], resultado: ObjectId() },
+    { equipoLocal: psgId, equipoVisitante: bayernId, fecha: new Date("2024-06-16"), hora: "19:00", estadio: "Parc des Princes", arbitroPrincipal: cakirId, arbitrosAsistentes: [taylorId, orsatoId], resultado: ObjectId() },
+    { equipoLocal: cityId, equipoVisitante: barcelonaId, fecha: new Date("2024-06-17"), hora: "21:00", estadio: "Etihad Stadium", arbitroPrincipal: brychId, arbitrosAsistentes: [cakirId, kuipersId], resultado: ObjectId() },
+    { equipoLocal: madridId, equipoVisitante: bayernId, fecha: new Date("2024-06-18"), hora: "18:30", estadio: "Santiago Bernabéu", arbitroPrincipal: taylorId, arbitrosAsistentes: [brychId, orsatoId], resultado: ObjectId() },
+    { equipoLocal: psgId, equipoVisitante: cityId, fecha: new Date("2024-06-19"), hora: "20:45", estadio: "Parc des Princes", arbitroPrincipal: kuipersId, arbitrosAsistentes: [taylorId, cakirId], resultado: ObjectId() }
+]);
